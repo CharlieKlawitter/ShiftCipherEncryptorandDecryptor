@@ -1,61 +1,27 @@
-from pydoc import plaintext
 
-letters = "abcdefghijklmnopqrstuvwxyz"
-num_letters = len(letters)
+plaintext = input("What message would you like to encrypt? ")
+key = int(input("What key would you like to use to encrypt? "))
 
-def encrypt(plaintext, key):
-    ciphertext = ""
-    for letter in plaintext:
-        letter = letter.lower()
-        if not letter == " ":
-            index = letters.find(letter)
-            if index == -1:
-                ciphertext += letter
-            else:
-                new_index = index + key
-                if new_index >= num_letters:
-                    new_index -= num_letters
-                ciphertext += letters[new_index]
+#Defining the Shift Cipher Function
+def shift(plaintext, key):
+    ciphertext = '' #Initialize empty string
+    for char in plaintext:
+        #Encrypt Uppercase Letters
+        if char.isupper():
+          ciphertext += chr((ord(char) + key - 65) % 26 + 65)
+        #Encrypt Lowercase Letters
+        elif char.islower():
+          ciphertext += chr((ord(char) + key - 97) % 26 + 97)
+        #Leave characters and numbers the way they are
+        else:
+            ciphertext += char
+        #Convert all encrypted text to uppercase
+    ciphertext = ciphertext.upper()
+
     return ciphertext
+        #Set ciphertext to equal the function
+ciphertext = shift(plaintext, key)
 
-def decrypt(ciphertext, key):
-    plaintext = " "
-    for letter in ciphertext:
-        letter = letter.lower()
-        if not letter == " ":
-            index = letters.find(letter)
-            if index == -1:
-                plaintext += letter
-            else:
-                new_index = index - key
-                if new_index < 0:
-                    new_index += num_letters
-                plaintext += letters[new_index]
-    return plaintext
+#Output ciphertext
+print(f"Your encrypted message is {ciphertext}")
 
-
-
-print()
-print("*** Caesar Cipher Program ***")
-print()
-
-print("Do you want to encrypt or decrypt? ")
-
-user_input = input('e/d:').lower()
-print()
-
-if user_input == "e" :
-    print("Encryption Mode Selected")
-    print()
-    key = int(input("Enter the Key (1 through 26): "))
-    text = input("Enter the text to encrypt: ")
-    ciphertext = encrypt(text, key)
-    print(f"CIPHERTEXT: {ciphertext}")
-
-elif user_input == "d" :
-    print("Decryption Mode Selected")
-    print()
-    key = int(input("Enter the Key (1 through 26): "))
-    text = input("Enter the text to decrypt: ")
-    plaintext = decrypt(text, key)
-    print(f"PLAINTEXT: {plaintext}")
